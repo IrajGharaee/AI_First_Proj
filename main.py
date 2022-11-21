@@ -3,6 +3,7 @@ class Vertex:
         self.ID = ID
         self.kind = kind
         self.adjacent = {}
+        self.isVisited = True
 
     def __str__(self):
         return str(self.ID) + ' adjacent: ' + str([x.ID for x in self.adjacent])
@@ -18,6 +19,9 @@ class Vertex:
 
     def get_weight(self, neighbor):
         return self.adjacent[neighbor]
+
+    def is_visited(self):
+        return self.isVisited
 
 
 class Graph:
@@ -42,7 +46,8 @@ class Graph:
             return None
 
     def add_edge(self, frm, to, cost):
-        self.vert_dict[frm].add_neighbor(self.vert_dict[to], cost)
+        print("edge added", frm, to)
+        # self.vert_dict[frm].add_neighbor(self.vert_dict[to], cost)
         # self.vert_dict[to].add_neighbor(self.vert_dict[frm], cost)
 
     def get_vertices(self):
@@ -56,70 +61,91 @@ C = int(input("Enter the number of columns:"))
 
 # Initialize matrix
 matrix = []
+for i in range(R):  # A for loop for row entries
+    a = []
+    for j in range(C):
+        a.append("y")
+    matrix.append(a)
 # For user input
 for i in range(R):  # A for loop for row entries
     a = []
     for j in range(C):  # A for loop for column entries
-        a.append(input())
-    matrix.append(a)
+        # a.append(input())
+        print(i, j)
+        # print(a)
+        matrix[i][j] = input()
+    # matrix.append(a)
+    print(matrix)
 
 
 def coords(i, j, R, C):
-    def up():
-        if j - 1 > 0:
+    def left():
+        if j - 1 >= 0:
             dest = matrix[i][j - 1]
-            cost = 0
-            if not dest.__contains__('x'):
-                if dest.__contains__('b') or dest.__contains__('p'):
-                    cost = int(dest.replace(dest[len(dest) - 1], ''))
-                    g.add_vertex(i + C * j, dest[len(dest) - 1])
-                else:
-                    cost = int(dest)
-                    g.add_vertex(i + C * j, 'none')
-                g.add_edge(i + C * j, i + C * j - 1, cost)
-                coords(i, j - 1, R, C)
-
-    def down():
-        if j + 1 < R:
-            dest = matrix[i][j + 1]
-            cost = 0
-            if not dest.__contains__('x'):
-                if dest.__contains__('b') or dest.__contains__('p'):
-                    cost = int(dest.replace(dest[len(dest) - 1], ''))
-                    g.add_vertex(i + C * j, dest[len(dest) - 1])
-                else:
-                    cost = int(dest)
-                    g.add_vertex(i + C * j, 'none')
-                g.add_edge(i + C * j, i + C * j + 1, cost)
-                coords(i, j + 1, R, C)
+            dest_node = g.get_vertex(i * C + j - 1)
+            if dest_node is None or not dest_node.is_visited():
+                cost = 0
+                if not dest.__contains__('x'):
+                    if dest.__contains__('b') or dest.__contains__('p') or dest.__contains__('r'):
+                        cost = int(dest.replace(dest[len(dest) - 1], ''))
+                        g.add_vertex(i * C + j, dest[len(dest) - 1])
+                    else:
+                        cost = int(dest)
+                        g.add_vertex(i * C + j, 'none')
+                    g.add_edge(i * C + j, i * C + j - 1, cost)
+                    print('left')
+                    coords(i, j - 1, R, C)
 
     def right():
+        if j + 1 < R:
+            dest = matrix[i][j + 1]
+            dest_node = g.get_vertex(i * C + j + 1)
+            if dest_node is None or not dest_node.is_visited():
+                cost = 0
+                if not dest.__contains__('x'):
+                    if dest.__contains__('b') or dest.__contains__('p') or dest.__contains__('r'):
+                        cost = int(dest.replace(dest[len(dest) - 1], ''))
+                        g.add_vertex(i * C + j, dest[len(dest) - 1])
+                    else:
+                        cost = int(dest)
+                        g.add_vertex(i * C + j, 'none')
+                    g.add_edge(i * C + j, i * C + j + 1, cost)
+                    print('right')
+                    coords(i, j + 1, R, C)
+
+    def down():
         if i + 1 < C:
             dest = matrix[i + 1][j]
-            cost = 0
-            if not dest.__contains__('x'):
-                if dest.__contains__('b') or dest.__contains__('p'):
-                    cost = int(dest.replace(dest[len(dest) - 1], ''))
-                    g.add_vertex(i + C * j, dest[len(dest) - 1])
-                else:
-                    cost = int(dest)
-                    g.add_vertex(i + C * j, 'none')
-                g.add_edge(i + C * j, i + C * j - 1, cost)
-                coords(i + 1, j, R, C)
+            dest_node = g.get_vertex(i * C + j + 1)
+            if dest_node is None or not dest_node.is_visited():
+                cost = 0
+                if not dest.__contains__('x'):
+                    if dest.__contains__('b') or dest.__contains__('p') or dest.__contains__('r'):
+                        cost = int(dest.replace(dest[len(dest) - 1], ''))
+                        g.add_vertex(i * C + j, dest[len(dest) - 1])
+                    else:
+                        cost = int(dest)
+                        g.add_vertex(i * C + j, 'none')
+                    g.add_edge(i * C + j, i * C + j + 1, cost)
+                    print('down')
+                    coords(i + 1, j, R, C)
 
-    def left():
-        if i - 1 > 0:
+    def up():
+        if i - 1 >= 0:
             dest = matrix[i - 1][j]
-            cost = 0
-            if (not dest.__contains__('x')):
-                cost = int(dest.replace(dest[len(dest) - 1], ''))
-                if dest.__contains__('b') or dest.__contains__('p'):
-                    g.add_vertex(i + C * j, dest[len(dest) - 1])
-                else:
-                    cost = int(dest)
-                    g.add_vertex(i + C * j, 'none')
-                g.add_edge(i + C * j, i + C * j - 1, cost)
-                coords(i - 1, j, R, C)
+            dest_node = g.get_vertex(i * C + j - 1)
+            if dest_node is None or not dest_node.is_visited():
+                cost = 0
+                if (not dest.__contains__('x')):
+                    if dest.__contains__('b') or dest.__contains__('p') or dest.__contains__('r'):
+                        cost = int(dest.replace(dest[len(dest) - 1], ''))
+                        g.add_vertex(i * C + j, dest[len(dest) - 1])
+                    else:
+                        cost = int(dest)
+                        g.add_vertex(i * C + j, 'none')
+                    g.add_edge(i * C + j, i * C + j - 1, cost)
+                    print('up')
+                    coords(i - 1, j, R, C)
 
     up()
     down()
@@ -138,6 +164,13 @@ for i in range(R):
                 Robot_i = i
                 Robot_j = j
                 flag = False
+                print("robot founded")
                 break
 
-coords(Robot_i, Robot_j, R, C)
+
+def robot_coords(i, j, R, C):
+    g.add_vertex(i * C + j, 'r')
+    coords(i, j, R, C)
+
+
+robot_coords(Robot_i, Robot_j, R, C)
