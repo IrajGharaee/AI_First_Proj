@@ -1,3 +1,5 @@
+# کلاس ساخت نود های گراف
+# هر درایه ماتریس ورودی که x نباشد یک نود گراف است
 class Vertex:
     def __init__(self, ID, kind):
         self.ID = ID
@@ -24,6 +26,8 @@ class Vertex:
         return self.isVisited
 
 
+# کلاس ساخت گراف که نود ها داخل این کلاس ساخته میشوند
+# از کلاس گراف فقط یک آبجکت ساخته میشود
 class Graph:
     def __init__(self):
         self.vert_dict = {}
@@ -40,15 +44,13 @@ class Graph:
             # return new_vertex
 
     def get_vertex(self, n):
-        if n in self.vert_dict:
+        if self.vert_dict.get(n) is not None:
             return self.vert_dict[n]
         else:
             return None
 
     def add_edge(self, frm, to, cost):
-        print("edge added", frm, to)
-        # self.vert_dict[frm].add_neighbor(self.vert_dict[to], cost)
-        # self.vert_dict[to].add_neighbor(self.vert_dict[frm], cost)
+        self.vert_dict[frm].add_neighbor(self.vert_dict[to], cost)
 
     def get_vertices(self):
         return self.vert_dict.keys()
@@ -61,12 +63,13 @@ C = int(input("Enter the number of columns:"))
 
 # Initialize matrix
 matrix = []
-for i in range(R):  # A for loop for row entries
+for i in range(R):
     a = []
     for j in range(C):
         a.append("y")
     matrix.append(a)
 # For user input
+# ماتریس درایه ها را یکی یکی دریافت میکند
 for i in range(R):  # A for loop for row entries
     a = []
     for j in range(C):  # A for loop for column entries
@@ -78,6 +81,13 @@ for i in range(R):  # A for loop for row entries
     print(matrix)
 
 
+# این تابع یکبار صدا زده میشود برای اضافه کردن درایه حاوی روبات
+def robot_coords(i, j, R, C):
+    g.add_vertex(i * C + j, 'r')
+    coords(i, j, R, C)
+
+
+# وارد کردن تمام درایه ها به داخل گراف با استفاده از توابع بازگشتی
 def coords(i, j, R, C):
     def left():
         if j - 1 >= 0:
@@ -93,7 +103,6 @@ def coords(i, j, R, C):
                         cost = int(dest)
                         g.add_vertex(i * C + j, 'none')
                     g.add_edge(i * C + j, i * C + j - 1, cost)
-                    print('left')
                     coords(i, j - 1, R, C)
 
     def right():
@@ -110,13 +119,12 @@ def coords(i, j, R, C):
                         cost = int(dest)
                         g.add_vertex(i * C + j, 'none')
                     g.add_edge(i * C + j, i * C + j + 1, cost)
-                    print('right')
                     coords(i, j + 1, R, C)
 
     def down():
         if i + 1 < C:
             dest = matrix[i + 1][j]
-            dest_node = g.get_vertex(i * C + j + 1)
+            dest_node = g.get_vertex((i + 1) * C + j)
             if dest_node is None or not dest_node.is_visited():
                 cost = 0
                 if not dest.__contains__('x'):
@@ -126,14 +134,13 @@ def coords(i, j, R, C):
                     else:
                         cost = int(dest)
                         g.add_vertex(i * C + j, 'none')
-                    g.add_edge(i * C + j, i * C + j + 1, cost)
-                    print('down')
+                    g.add_edge(i * C + j, (i + 1) * C + j, cost)
                     coords(i + 1, j, R, C)
 
     def up():
         if i - 1 >= 0:
             dest = matrix[i - 1][j]
-            dest_node = g.get_vertex(i * C + j - 1)
+            dest_node = g.get_vertex((i - 1) * C + j)
             if dest_node is None or not dest_node.is_visited():
                 cost = 0
                 if (not dest.__contains__('x')):
@@ -143,18 +150,16 @@ def coords(i, j, R, C):
                     else:
                         cost = int(dest)
                         g.add_vertex(i * C + j, 'none')
-                    g.add_edge(i * C + j, i * C + j - 1, cost)
-                    print('up')
+                    g.add_edge(i * C + j, (i - 1) * C + j, cost)
                     coords(i - 1, j, R, C)
 
-    up()
-    down()
     right()
     left()
+    down()
+    up()
 
 
 flag = True
-
 Robot_i = 0
 Robot_j = 0
 for i in range(R):
@@ -164,13 +169,7 @@ for i in range(R):
                 Robot_i = i
                 Robot_j = j
                 flag = False
-                print("robot founded")
                 break
-
-
-def robot_coords(i, j, R, C):
-    g.add_vertex(i * C + j, 'r')
-    coords(i, j, R, C)
 
 
 robot_coords(Robot_i, Robot_j, R, C)
