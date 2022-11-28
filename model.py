@@ -1,11 +1,12 @@
 class Obj:
     row: int
     col: int
-    type: int
-    cost: int
+    type_obj: int
 
-    def __init__(self):
-        pass
+    def __init__(self, row, col, type_obj) -> None:
+        self.col = col
+        self.row = row
+        self.type_obj = type_obj
 
     def __eq__(self, o: object) -> bool:
         if type(o) == Obj:
@@ -24,8 +25,8 @@ class State:
     butters: list[Obj]
     goals_have_butter: list[Obj]
 
-    def __init__(self, robot: Obj, butters: list[Obj], visited, parents) -> None:
-        pass
+    def __init__(self, parent) -> None:
+        self.parent = parent
 
     def __eq__(self, o: object) -> bool:
         if self.robot != o.robot:
@@ -46,3 +47,15 @@ class State:
 
     def __str__(self) -> str:
         pass
+
+
+objects = {
+    "p": 0,
+    "r": 1,
+    "b": 2,
+    "x": 3,
+}
+
+
+
+MAX_VALUE = 10 ^ 10
