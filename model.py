@@ -1,3 +1,6 @@
+import sys
+
+
 class Obj:
     row: int
     col: int
@@ -16,37 +19,43 @@ class Obj:
         else:
             raise Exception("Object not define")
 
-    def __str__(self) -> str:
-        pass
+    def copy(self):
+        return Obj(self.row, self.col, self.type_obj)
+
+    def get_location(self):
+        return self.row, self.col
 
 
 class State:
     robot: Obj
     butters: list[Obj]
-    goals_have_butter: list[Obj]
+    pass_butters: list[Obj]
 
-    def __init__(self, parent) -> None:
-        self.parent = parent
+    def __init__(self, state=None) -> None:
+        if not state:
+            self.parent = None
+        else:
+            self.parent = state
+            self.robot = state.robot.copy()
+            self.butters = [butter.copy() for butter in state.butters]
+            self.pass_butters = [goal.copy() for goal in state.pass_butters]
 
     def __eq__(self, o: object) -> bool:
         if self.robot != o.robot:
             return False
-
         counter = 0
         for butter in self.butters:
             for butter_o in o.butters:
                 if butter.__eq__(butter_o):
                     counter += 1
-
-        for butter in self.goals_have_butter:
-            for butter_o in o.goals_have_butter:
+        for butter in self.pass_butters:
+            for butter_o in o.pass_butters:
                 if butter.__eq__(butter_o):
                     counter += 1
+        return counter == len(self.butters) + len(self.pass_butters)
 
-        return counter == len(self.butters) + len(self.goals_have_butter)
-
-    def __str__(self) -> str:
-        pass
+    def copy(self):
+        return State(self)
 
 
 objects = {
@@ -54,8 +63,11 @@ objects = {
     "r": 1,
     "b": 2,
     "x": 3,
+    0: "p",
+    1: "r",
+    2: "b",
+    3: "x",
 }
 
+MAX_VALUE = sys.maxsize
 
-
-MAX_VALUE = 10 ^ 10
