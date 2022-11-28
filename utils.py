@@ -6,7 +6,7 @@ from model import MAX_VALUE
 
 class Utils:
     root: State
-    costs: list
+    costs: list[int]
     goals: list[Obj]
     blockages: list[Obj]
 
@@ -14,8 +14,10 @@ class Utils:
         self.model_matrix = matrix
         self.n = len(matrix)
         self.m = len(matrix[0])
-        self.goals = [[None]*m]*n
-        self.blockages = [[None]*m]*n
+        self.goals = [[None]*self.m for i in range(self.n)]
+        self.blockages = [[None]*self.m for i in range(self.n)]
+        self.costs = []
+        self.root = State()
         self.create_model()
 
     def create_model(self):
@@ -29,22 +31,22 @@ class Utils:
                 if "b" in m:
                     if "p" in m:
                         self.root.pass_butters.append(Obj(i, j, objects["b"]))
-                        Utils.goals.append(Obj(i, j, objects["p"]))
+                        self.goals.append(Obj(i, j, objects["p"]))
                         m = m.replace("p", "")
                         m = m.replace("b", "")
                     else:
                         self.root.butters.append(Obj(i, j, objects["b"]))
                         m = m.replace("b", "")
                 if "p" in m:
-                    Utils.goals[i][j] = Obj(i, j, objects["p"])
+                    self.goals[i][j] = Obj(i, j, objects["p"])
                     m = m.replace("p", "")
                 if "x" in m:
-                    Utils.blockages[i][j] = Obj(i, j, objects["x"])
+                    self.blockages[i][j] = Obj(i, j, objects["x"])
                     row_cost.append(MAX_VALUE)
                     m = m.replace("x", "")
                 else:
                     row_cost.append(int(m))
-                Utils.costs.append(row_cost)
+                self.costs.append(row_cost)
 
     def update_model(self, matrix=None):
         if not matrix:
