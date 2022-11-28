@@ -27,22 +27,22 @@ class Utils:
                 if "b" in m:
                     if "p" in m:
                         self.root.pass_butters.append(Obj(i, j, objects["b"]))
-                        self.goals.append(Obj(i, j, objects["p"]))
+                        Utils.goals.append(Obj(i, j, objects["p"]))
                         m = m.replace("p", "")
                         m = m.replace("b", "")
                     else:
                         self.root.butters.append(Obj(i, j, objects["b"]))
                         m = m.replace("b", "")
                 if "p" in m:
-                    self.goals.append(Obj(i, j, objects["p"]))
+                    Utils.goals.append(Obj(i, j, objects["p"]))
                     m = m.replace("p", "")
                 if "x" in m:
-                    self.blockages.append(Obj(i, j, objects["x"]))
+                    Utils.blockages.append(Obj(i, j, objects["x"]))
                     row_cost.append(MAX_VALUE)
                     m = m.replace("x", "")
                 else:
                     row_cost.append(int(m))
-                self.costs.append(row_cost)
+                Utils.costs.append(row_cost)
 
     def update_model(self, matrix=None):
         if not matrix:
