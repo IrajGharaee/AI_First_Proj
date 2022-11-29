@@ -7,7 +7,7 @@ class Successor:
     def __init__(self,utils):
         self.utils = utils
     
-    def successor(self,state: State) -> list[State]:
+    def successor(self,state: State,state_set) -> list[State]:
         states = []
         for move in {(1,0),(-1,0),(0,1),(0,-1)} :
             r,b = self.check_location_free(state,move)
@@ -16,21 +16,15 @@ class Successor:
                 new_state.robot += move
                 if b:
                     _x, _y = state.robot.get_location()
-                    if self.utils.goals[_x][_y]:
+                    if self.utils.goals[_x + 2*move[0]][_y + 2*move[1]]:
                         new_state.butters.remove(b)
-                        new_state.pass_butters.append(b+move)
+                        new_state.pass_butters.append( b + move )
                     else:
                         new_state.butters.remove(b)
                         new_state.butters.append(b + move)
-                s = state.parent
-                repeat = False
-                while s:
-                    if s == new_state:
-                        repeat = True
-                        break
-                    s = s.parent
-                if not repeat:
+                if new_state not in state_set : 
                     states.append(new_state)
+        state_set.add(state)
         return states
     def check_location_free(self,state, move):
         _x, _y = state.robot.get_location()
@@ -45,6 +39,9 @@ class Successor:
                         for b in state.butters:
                             if b == [ _x + 2*move[0] , _y + 2*move[1] ]:
                                 return False,False
+                        for b in state.pass_butters:
+                            if b == [ _x + 2*move[0] , _y + 2*move[1] ]:
+                                return False,False
                         return True,butter
                     else:
                         return False,False
@@ -55,3 +52,11 @@ class Successor:
         else:
             return False,False
 
+"""
+5 5
+x r1 x x 1
+1 1 1 1 1
+1 b1 1 1 1
+1 1 1 1 1
+1 p1 1 1 1
+"""
