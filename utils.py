@@ -16,7 +16,7 @@ class Utils:
         self.m = len(matrix[0])
         self.goals = [[None]*self.m for i in range(self.n)]
         self.blockages = [[None]*self.m for i in range(self.n)]
-        self.costs = []
+        self.costs = [[0]*self.m for i in range(self.n)]
         self.root = State()
         self.create_model()
 
@@ -24,7 +24,6 @@ class Utils:
         for i in range(self.n):
             for j in range(self.m):
                 m = self.model_matrix[i][j]
-                row_cost = []
                 if "r" in m:
                     self.root.robot = Obj(i, j, objects["r"])
                     m = m.replace("r", "")
@@ -42,11 +41,10 @@ class Utils:
                     m = m.replace("p", "")
                 if "x" in m:
                     self.blockages[i][j] = Obj(i, j, objects["x"])
-                    row_cost.append(MAX_VALUE)
+                    self.costs[i][j] = MAX_VALUE
                     m = m.replace("x", "")
                 else:
-                    row_cost.append(int(m))
-                self.costs.append(row_cost)
+                    self.costs[i][j] = int(m)
 
     def update_model(self, matrix=None):
         if not matrix:
@@ -54,3 +52,17 @@ class Utils:
             self.n = len(matrix)
             self.m = len(matrix[0])
         self.create_model()
+
+    def print_matrix(self, _state):
+        matrix = [row.copy() for row in self.costs]
+        matrix[_state.robot.row][_state.robot.col] = str(matrix[_state.robot.row][_state.robot.col]) + objects[
+            _state.robot.type_obj]
+        for obj in _state.butters:
+            matrix[obj.row][obj.col] = str(matrix[obj.row][obj.col]) + objects[obj.type_obj]
+        for obj in _state.pass_butters:
+            matrix[obj.row][obj.col] = str(matrix[obj.row][obj.col]) + objects[obj.type_obj]
+        for row in matrix:
+            for a in row:
+                print(a, end=" ")
+            print()
+        print()
