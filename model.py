@@ -29,17 +29,20 @@ class Obj:
         return "{ row:" + str(self.row) + ", col:"+ str(self.col) + ", type:" + objects[self.type_obj] + "}"
     
     def __add__(self, o):
+        copy = self.copy()
         if type(o) == Obj:
-            self.row += o.row
-            self.col += o.col
-            return self
+            copy.row += o.row
+            copy.col += o.col
+            return copy
         if type(o) in [list, set, tuple]:
-            self.row += o[0]
-            self.col += o[1]
-            return self
+            copy.row += o[0]
+            copy.col += o[1]
+            return copy
         else:
             raise Exception("Object not define")
 
+    def __hash__(self):
+        return hash(self.row) + hash(self.col) + hash(self.col*self.row) + hash(str(self.row)) + hash(str(self.col)) + hash(str(self.col*self.row))
 
 class State:
     robot: Obj
@@ -63,11 +66,11 @@ class State:
         counter = 0
         for butter in self.butters:
             for butter_o in o.butters:
-                if butter.__eq__(butter_o):
+                if butter == butter_o:
                     counter += 1
         for butter in self.pass_butters:
             for butter_o in o.pass_butters:
-                if butter.__eq__(butter_o):
+                if butter == butter_o:
                     counter += 1
         return counter == len(self.butters) + len(self.pass_butters)
 
@@ -76,6 +79,16 @@ class State:
     
     def __str__(self):
         return self.robot.__str__()
+
+    def __hash__(self):
+        h1 = hash(self.robot)
+        h2 = hash(self.robot)
+        for obj in self.butters + self.pass_butters:
+            h1 += hash(obj)
+            h2 *= hash(obj)
+        return h1 + h2
+            
+            
 
 
 
