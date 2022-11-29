@@ -26,7 +26,7 @@ class Obj:
         return self.row, self.col
     
     def __str__(self):
-        return "{ x:" + str(self.row) + ", y:"+ str(self.col) + ", type:" + objects[self.type_obj] + "}"
+        return "{ row:" + str(self.row) + ", col:"+ str(self.col) + ", type:" + objects[self.type_obj] + "}"
     
     def __add__(self, o):
         if type(o) == Obj:
@@ -47,7 +47,6 @@ class State:
     pass_butters: list[Obj]
 
     def __init__(self, state=None) -> None:
-        print(state)
         if not state:
             self.parent = None
             self.butters = []
