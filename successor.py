@@ -12,10 +12,11 @@ class Successor:
         for move in {(1,0),(-1,0),(0,1),(0,-1)} :
             r,b = self.check_location_free(state,move)
             if r:
+                _x, _y = state.robot.get_location()
                 new_state = State(state)
                 new_state.robot += move
+                new_state.cost += self.utils.costs[_x + move[0]][_y + move[1]]
                 if b:
-                    _x, _y = state.robot.get_location()
                     if self.utils.goals[_x + 2*move[0]][_y + 2*move[1]]:
                         new_state.butters.remove(b)
                         new_state.pass_butters.append( b + move )

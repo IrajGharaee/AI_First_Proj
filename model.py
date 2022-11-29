@@ -48,17 +48,20 @@ class State:
     robot: Obj
     butters: list[Obj]
     pass_butters: list[Obj]
+    cost: int
 
     def __init__(self, state=None) -> None:
         if not state:
             self.parent = None
             self.butters = []
             self.pass_butters = []
+            self.cost = 0
         else:
             self.parent = state
             self.robot = state.robot.copy()
             self.butters = [butter.copy() for butter in state.butters]
             self.pass_butters = [goal.copy() for goal in state.pass_butters]
+            self.cost = state.cost
 
     def __eq__(self, o: object) -> bool:
         if self.robot != o.robot:
@@ -73,6 +76,18 @@ class State:
                 if butter == butter_o:
                     counter += 1
         return counter == len(self.butters) + len(self.pass_butters)
+    
+    def __gt__(self, other):
+        if type(other) == State:
+            return self.cost >= other.cost
+        else:
+            raise Exception("Object not define")
+        
+    def __lt__(self, other):
+        if type(other) == State:
+            return self.cost <= other.cost
+        else:
+            raise Exception("Object not define")
 
     def copy(self):
         return State(self)
