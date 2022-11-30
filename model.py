@@ -49,6 +49,7 @@ class State:
     butters: list[Obj]
     pass_butters: list[Obj]
     cost: int
+    depth: int
 
     def __init__(self, state=None) -> None:
         if not state:
@@ -56,12 +57,14 @@ class State:
             self.butters = []
             self.pass_butters = []
             self.cost = 0
+            self.depth = 0
         else:
             self.parent = state
             self.robot = state.robot.copy()
             self.butters = [butter.copy() for butter in state.butters]
             self.pass_butters = [goal.copy() for goal in state.pass_butters]
             self.cost = state.cost
+            self.depth = state.depth
 
     def __eq__(self, o: object) -> bool:
         if self.robot != o.robot:
