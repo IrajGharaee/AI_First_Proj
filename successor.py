@@ -16,6 +16,7 @@ class Successor:
                 new_state = State(state)
                 new_state.robot += move
                 new_state.cost += self.utils.costs[_x + move[0]][_y + move[1]]
+                new_state.depth += 1
                 if b:
                     if self.utils.goals[_x + 2*move[0]][_y + 2*move[1]]:
                         new_state.butters.remove(b)
