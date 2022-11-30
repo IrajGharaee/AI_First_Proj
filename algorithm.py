@@ -1,9 +1,9 @@
 def dfs(root,s):
     stack = [root]
     state_set = set([])
-    state = stack.pop()
-    state_set.add(state)
-    while stack or not state.butters:
+    state_set.add(root)
+    state = root
+    while stack and state.butters:
         stack += s.successor(state, state_set)
         state = stack.pop()
     return state
@@ -11,9 +11,9 @@ def dfs(root,s):
 def bfs(root,s):
     stack = [root]
     state_set = set([])
-    state = stack.pop(0)
-    state_set.add(state)
-    while stack or not state.butters:
+    state_set.add(root)
+    state = root
+    while stack and state.butters:
         stack += s.successor(state, state_set)
         state = stack.pop(0)
     return state
