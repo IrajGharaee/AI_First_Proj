@@ -44,6 +44,7 @@ class Obj:
     def __hash__(self):
         return hash(self.row) + hash(self.col) + hash(self.col*self.row) + hash(str(self.row)) + hash(str(self.col)) + hash(str(self.col*self.row))
 
+
 class State:
     robot: Obj
     butters: list[Obj]
@@ -106,9 +107,6 @@ class State:
             h2 *= hash(obj)
         return h1 + h2
             
-            
-
-
 
 objects = {
     "p": 0,
@@ -120,6 +118,7 @@ objects = {
     2: "b",
     3: "x",
 }
+
 
 MAX_VALUE = sys.maxsize
 
