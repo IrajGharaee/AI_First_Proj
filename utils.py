@@ -71,10 +71,10 @@ class Utils:
                 if MAX_VALUE == self.costs[i][j]: # blockage
                     matrix[i][j] = "x"
                 if self.goals[i][j]: # point ( goal )
-                    matrix[i][j] += "p"
+                    matrix[i][j] = str(matrix[i][j] ) + "p"
 
         for row in matrix:
             for a in row:
-                print(a, end=" ")
+                print(a, end="\t")
             print()
         print()
