@@ -35,12 +35,14 @@ def ids(root,s):
         if depth > 100:
             return None
 
+
 def ucs(root,s):
-    states = [root]
+    states = set([root])
     state_set = set([])
     state_set.add(root)
     state = root
     while states and state.butters:
-        state = states.pop(states.index(max(states)))
-        states += s.successor(state, state_set)
+        state = min(states)
+        states = states.union(set(s.successor(state, state_set)))
+        states.remove(state)
     return state

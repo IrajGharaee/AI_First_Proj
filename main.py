@@ -22,11 +22,11 @@ utils = Utils(matrix)
 s = Successor(utils)
 
 # state_dfs = dfs(utils.root,s)
-state_bfs = bfs(utils.root,s)
+# state_bfs = bfs(utils.root,s)
 # state_ids = ids(utils.root,s)
-# state_ucs = ucs(utils.root,s)
+state_ucs = ucs(utils.root,s)
 
-state = state_bfs
+state = state_ucs
 states = []
 while state:
     states.append(state)
