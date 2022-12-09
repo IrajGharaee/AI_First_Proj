@@ -57,6 +57,7 @@ class Utils:
             self.m = len(matrix[0])
         self.create_model() # O(n*m)
 
+
     def print_matrix(self, _state): # print matrix from state  O(n*m)
 
         matrix = [row.copy() for row in self.costs] # copy matrix cost
