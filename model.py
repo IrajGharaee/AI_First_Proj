@@ -107,12 +107,14 @@ class State:
             h2 *= hash(obj)
         return h1 + h2
 
-    def heuristic(self, i,j):
-        butter_cords = sys.maxsize
+    def heuristic(self):
+        i = self.robot.row
+        j = self.robot.col
+        butter_distance = sys.maxsize
         for butter in self.butters:
-            if abs(i-butter.row) + abs(j-butter.col) < butter_cords:
-                butter_cords = abs(i-butter.row) + abs(j-butter.col)
-        return butter_cords
+            if abs(i-butter.row) + abs(j-butter.col) < butter_distance:
+                butter_distance = abs(i-butter.row) + abs(j-butter.col)
+        return butter_distance
 
             
 
