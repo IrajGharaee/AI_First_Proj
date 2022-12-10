@@ -9,6 +9,7 @@ class Utils:
     costs: list[int] # matrix n*m of cost of each element
     goals: list[Obj] # matrix n*m of goals ( if element not goal element is none )
     blockages: list[Obj] # matrix n*m of blockages ( if element not block element is none )
+    goals_list : list[Obj]
 
     def __init__(self, matrix):
         # initialization
@@ -20,7 +21,9 @@ class Utils:
         self.costs = [[0]*self.m for i in range(self.n)] # O(n*m)
         self.root = State()
         # create model matrix ( fill root state , goals , blocks , costs )
+        self.goals_list = []
         self.create_model() # O(n*m)
+
 
     def create_model(self): # O(n*m)
         # iterate over the array row
@@ -42,6 +45,7 @@ class Utils:
                         m = m.replace("b", "")
                 if "p" in m: # if point ( goal ) in m
                     self.goals[i][j] = Obj(i, j, objects["p"])
+                    self.goals_list.append(Obj(i, j, objects["p"]))
                     m = m.replace("p", "")
                 if "x" in m: # if m is blockage
                     self.blockages[i][j] = Obj(i, j, objects["x"])
