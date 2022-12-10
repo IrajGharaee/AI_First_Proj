@@ -52,13 +52,12 @@ def ucs(root,s):
         states.remove(state)
     return state
 
-
 def A_star(root, s):
-    def find_best():
+    def find_best(utils):
         total_cost = sys.maxsize
         for _state in states:
-            if _state.cost + _state.heuristic() < total_cost:
-                total_cost = _state.cost + _state.heuristic()
+            if _state.cost + _state.heuristic(utils) < total_cost:
+                total_cost = _state.cost + _state.heuristic(utils)
                 chosen_state = _state
         return chosen_state
 
@@ -71,12 +70,12 @@ def A_star(root, s):
         states += s.successor(state, state_set)
     return state
 
-def best_first_search(root, s):
+def best_first_search(root, s, utils):
     def find_best():
         cost = sys.maxsize
         for _state in states:
-            if _state.heuristic() < cost:
-                cost = _state.heuristic()
+            if _state.heuristic(utils) < cost:
+                cost = _state.heuristic(utils)
                 chosen_state = _state
         return chosen_state
 
