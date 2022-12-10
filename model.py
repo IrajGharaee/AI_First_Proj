@@ -107,8 +107,22 @@ class State:
             h2 *= hash(obj)
         return h1 + h2
 
+    def heuristic(self, utils):
+        i = self.robot.row
+        j = self.robot.col
+        butter_distance = sys.maxsize
+        for butter in self.butters:
+            if abs(i - butter.row) + abs(j - butter.col) < butter_distance:
+                butter_distance = abs(i - butter.row) + abs(j - butter.col)
+        if butter_distance != 1:
+            return butter_distance
+        else:
+            goal_distance = sys.maxsize
+            for goal in utils.goals:
+                if abs(i - goal.row) + abs(j - goal.col) < goal_distance:
+                    goal_distance = abs(i - goal.row) + abs(j - goal.col)
+            return goal_distance
 
-            
 
 objects = {
     "p": 0,

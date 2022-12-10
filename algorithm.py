@@ -51,3 +51,38 @@ def ucs(root, s):
         states += s.successor(state, state_set)
     return state
 
+def A_star(root, s):
+    def find_best(utils):
+        total_cost = sys.maxsize
+        for _state in states:
+            if _state.cost + _state.heuristic(utils) < total_cost:
+                total_cost = _state.cost + _state.heuristic(utils)
+                chosen_state = _state
+        return chosen_state
+
+    states = [root]
+    state_set = set([])
+    state_set.add(root)
+    state = root
+    while states and state.butters:
+        state = states.pop(states.index(find_best(states)))
+        states += s.successor(state, state_set)
+    return state
+
+def best_first_search(root, s, utils):
+    def find_best():
+        cost = sys.maxsize
+        for _state in states:
+            if _state.heuristic(utils) < cost:
+                cost = _state.heuristic(utils)
+                chosen_state = _state
+        return chosen_state
+
+    states = [root]
+    state_set = set([])
+    state_set.add(root)
+    state = root
+    while states and state.butters:
+        state = states.pop(states.index(find_best(states)))
+        states += s.successor(state, state_set)
+    return state
