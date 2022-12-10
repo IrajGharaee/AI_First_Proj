@@ -1,5 +1,6 @@
 from model import State
 from utils import Utils
+from model import Move
 
 class Successor:
     utils: Utils
@@ -24,6 +25,7 @@ class Successor:
                 new_state.robot += move # move robot
                 new_state.cost += self.utils.costs[_x + move[0]][_y + move[1]] # set cost
                 new_state.depth += 1 # set depth
+                new_state.move = Move.get(move)
                 if b: # move butter
                     if self.utils.goals[_x + 2*move[0]][_y + 2*move[1]]: # if the butter moves into the target
                         new_state.butters.remove(b)
