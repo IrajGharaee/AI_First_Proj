@@ -1,6 +1,5 @@
 import sys
 
-
 class Obj:
     row: int
     col: int
@@ -51,6 +50,7 @@ class State:
     pass_butters: list[Obj]
     cost: int
     depth: int
+    move: str
 
     def __init__(self, state=None) -> None:
         if not state:
@@ -59,6 +59,7 @@ class State:
             self.pass_butters = []
             self.cost = 0
             self.depth = 0
+            self.move = ""
         else:
             self.parent = state
             self.robot = state.robot.copy()
@@ -66,6 +67,7 @@ class State:
             self.pass_butters = [goal.copy() for goal in state.pass_butters]
             self.cost = state.cost
             self.depth = state.depth
+            self.move = state.move
 
     def __eq__(self, o: object) -> bool:
         if self.robot != o.robot:
@@ -127,6 +129,14 @@ objects = {
     1: "r",
     2: "b",
     3: "x",
+}
+
+
+Move = {
+    (-1,0):"U ",
+    (1,0): "D ",
+    (0,-1): "L ",
+    (0,1): "R ",
 }
 
 
